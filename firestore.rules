@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Không cho phép client tự đặt paid (chỉ PayOS webhook qua Admin SDK mới được).
+    match /orders/{orderId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid
+        && !(request.resource.data.paymentMethod == 'payos'
+             && request.resource.data.paymentStatus == 'paid');
+      allow update: if request.auth != null
+        && resource.data.userId == request.auth.uid
+        && !(
+          resource.data.get('paymentStatus', 'unpaid') == 'unpaid'
+          && request.resource.data.paymentStatus == 'paid'
+        );
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
