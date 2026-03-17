@@ -89,6 +89,47 @@ class SortBar extends StatelessWidget {
   }
 }
 
+class _FilterButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  const _FilterButton({required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.primary50,
+      borderRadius: BorderRadius.circular(AppRadius.md),
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: 8,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.tune_rounded,
+                size: 16,
+                color: AppColors.primary600,
+              ),
+              SizedBox(width: 6),
+              Text(
+                'Lọc',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class _SortDropdown extends StatelessWidget {
   final ProductSort value;
