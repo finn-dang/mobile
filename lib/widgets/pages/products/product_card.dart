@@ -930,7 +930,7 @@ class _DiscountPill extends StatelessWidget {
   }
 }
 
-
+class _RatingRow extends StatelessWidget {
   final String productId;
   final bool isHovered;
 
