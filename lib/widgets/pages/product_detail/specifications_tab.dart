@@ -53,6 +53,65 @@ class SpecificationsTab extends StatelessWidget {
   }
 }
 
+class _SpecRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final bool isMobile;
+  final bool isAlt;
+
+  const _SpecRow({
+    required this.label,
+    required this.value,
+    required this.isMobile,
+    required this.isAlt,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final labelText = Text(
+      label,
+      style: const TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: AppColors.textPrimary,
+        letterSpacing: -0.05,
+      ),
+    );
+    final valueText = Text(
+      value,
+      style: const TextStyle(
+        fontSize: 13,
+        color: AppColors.textSecondary,
+        height: 1.5,
+      ),
+    );
+
+    return Container(
+      color: isAlt ? AppColors.surfaceMuted : AppColors.surface,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? AppSpacing.md : AppSpacing.lg,
+        vertical: AppSpacing.md,
+      ),
+      child: isMobile
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                labelText,
+                const SizedBox(height: 4),
+                valueText,
+              ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(width: 200, child: labelText),
+                AppSpacing.gapMd,
+                Expanded(child: valueText),
+              ],
+            ),
+    );
+  }
+}
 
 class _EmptyState extends StatelessWidget {
   final IconData icon;
