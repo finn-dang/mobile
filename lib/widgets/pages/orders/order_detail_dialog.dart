@@ -179,3 +179,68 @@ class _OrderDetailDialogState extends State<OrderDetailDialog> {
 
 
 
+enum PaymentMethod {
+  creditCard,
+  paypal,
+  applePay,
+  googlePay,
+  bankTransfer,
+}
+
+class PaymentDetails {
+  final PaymentMethod method;
+  final String cardNumber;
+  final String expiryDate;
+  final String cvv;
+  final String holderName;
+
+  PaymentDetails({
+    required this.method,
+    required this.cardNumber,
+    required this.expiryDate,
+    required this.cvv,
+    required this.holderName,
+  });
+}
+
+class PaymentResult {
+  final bool success;
+  final String transactionId;
+  final String message;
+  final DateTime timestamp;
+
+  PaymentResult({
+    required this.success,
+    required this.transactionId,
+    required this.message,
+    required this.timestamp,
+  });
+}
+
+class PaymentService {
+  static final PaymentService _instance = PaymentService._internal();
+  factory PaymentService() => _instance;
+  PaymentService._internal();
+
+  Future<PaymentResult> processPayment(PaymentDetails details) async {
+    // Fake payment processing
+    await Future.delayed(Duration(seconds: 2));
+    
+    return PaymentResult(
+      success: true,
+      transactionId: 'TXN_${DateTime.now().millisecondsSinceEpoch}',
+      message: 'Payment processed successfully',
+      timestamp: DateTime.now(),
+    );
+  }
+
+  Future<bool> validateCard(String cardNumber) async {
+    await Future.delayed(Duration(milliseconds: 300));
+    return cardNumber.length == 16;
+  }
+
+  Future<List<String>> getSavedCards() async {
+    await Future.delayed(Duration(milliseconds: 500));
+    return ['**** **** **** 4242', '**** **** **** 5555'];
+  }
+}
