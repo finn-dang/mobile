@@ -279,3 +279,135 @@ class OrderCard extends StatelessWidget {
     );
   }
 
+  Widget _buildProductItem(BuildContext context, item) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.grey[200]!,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Hình ảnh sản phẩm
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: item.imageUrl != null
+                  ? WebSafeNetworkImage(
+                      imageUrl: item.imageUrl!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey[200],
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.headerBackground,
+                            ),
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.image_not_supported,
+                        size: 40,
+                        color: Colors.grey[400],
+                      ),
+                    )
+                  : Icon(
+                      Icons.image,
+                      size: 40,
+                      color: Colors.grey[400],
+                    ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Thông tin sản phẩm
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.productName,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (item.selectedVersion != null || item.selectedColor != null) ...[
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      [
+                        if (item.selectedVersion != null) item.selectedVersion,
+                        if (item.selectedColor != null) item.selectedColor,
+                      ].join(' - '),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey[700],
+                            fontSize: 12,
+                          ),
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.headerBackground.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        'Số lượng: ${item.quantity}',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.headerBackground,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                            ),
+                      ),
+                    ),
+                    Text(
+                      '${_formatPrice(item.price)} ₫',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.headerBackground,
+                            fontSize: 15,
+                          ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+

@@ -110,4 +110,94 @@ class OrdersTab extends StatelessWidget {
     );
   }
 }
+class Product {
+  final String id;
+  final String name;
+  final double price;
+  final String imageUrl;
+  final String description;
+
+  Product({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.imageUrl,
+    required this.description,
+  });
+}
+
+class CartItem {
+  final Product product;
+  int quantity;
+
+  CartItem({
+    required this.product,
+    this.quantity = 1,
+  });
+}
+
+class EcommerceProvider extends ChangeNotifier {
+  List<Product> _products = [];
+  List<CartItem> _cart = [];
+  bool _isLoading = false;
+
+  List<Product> get products => _products;
+  List<CartItem> get cart => _cart;
+  bool get isLoading => _isLoading;
+
+  Future<void> fetchProducts() async {
+    _isLoading = true;
+    notifyListeners();
+    
+    // Fake API call
+    await Future.delayed(Duration(milliseconds: 500));
+    
+    _products = [
+      Product(
+        id: '1',
+        name: 'Product 1',
+        price: 29.99,
+        imageUrl: '',
+        description: 'Description 1',
+      ),
+      Product(
+        id: '2',
+        name: 'Product 2',
+        price: 49.99,
+        imageUrl: '',
+        description: 'Description 2',
+      ),
+    ];
+    
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  void addToCart(Product product) {
+    final existingIndex = _cart.indexWhere((item) => item.product.id == product.id);
+    
+    if (existingIndex >= 0) {
+      _cart[existingIndex].quantity++;
+    } else {
+      _cart.add(CartItem(product: product));
+    }
+    notifyListeners();
+  }
+
+  void removeFromCart(String productId) {
+    _cart.removeWhere((item) => item.product.id == productId);
+    notifyListeners();
+  }
+
+  double get totalPrice {
+    return _cart.fold(0, (sum, item) => sum + (item.product.price * item.quantity));
+  }
+
+  Future<bool> checkout() async {
+    await Future.delayed(Duration(seconds: 1));
+    _cart.clear();
+    notifyListeners();
+    return true;
+  }
+}
 
